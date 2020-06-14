@@ -18,52 +18,31 @@ class JpanelSplit {
     private var contentPane: JPanel
     private var pinkPanel: JPanel
     private var yellowPanel: JPanel
-    var textPanel: JPanel? = null
     private var greenPanel: JPanel
     private var bluePanel: JPanel
     private var twoPanelContainer: JPanel
     private var nameField: JTextField
     private var accountNumberField: JTextField
-    private var ammountField: JTextField
+    private var amountField: JTextField
     private var yearField: JTextField
     private var monthList: JList<*>
     private var insertEntryButton: JButton
+    private var radioButtonSaving: JRadioButton
+    private var radioButtonCurrent: JRadioButton
+    private var dayComboBox: JComboBox<String?>
 
-    /* private void initComponents() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
-    /* private void addBtnActionPerformed(java.awt.event.ActionEvent e){
-        //get text from text fields
-        nameTf=t1.getText();
-        accTf=t2.getText();
-        amountTf= t3.getText();
-        yTf= t4.getText();
-        JpanelSplit j = new JpanelSplit();
-        j.setNameTf(nameTf);
-        j.setAccTf(accTf);
-        j.setAmountTf(amountTf);
-        j.setYTf(yTf);
-        //adding into array
-        alist.add(j);
+    private val accountsList = ArrayList<AccountInfo>()
 
-        count++;
-        JOptionPane.showMessageDialog(null,"ADDED");
-
-    }*/
-    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    private var nameTf: String
-
-    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    private var amountTf: String
-
-    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    private var accTf: String
-
-    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    private var yTf: String
-    private var count = 0
-    private val alist = ArrayList<JpanelSplit>()
-
+    private fun resetForm() {
+        this.nameField.text = ""
+        this.accountNumberField.text = ""
+        this.amountField.text = ""
+        this.yearField.text = ""
+        this.radioButtonCurrent.isSelected = false
+        this.radioButtonSaving.isSelected = false
+        this.monthList.selectedIndex = 0
+        this.dayComboBox.selectedIndex = 0
+    }
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
@@ -112,16 +91,16 @@ class JpanelSplit {
         val ammountLabel = JLabel("Amount:   ", SwingConstants.LEFT)
         ammountLabel.font = Font("Times New Roman", 1, 18)
         ammountLabel.setBounds(0, 50, 10, 10)
-        ammountField = JTextField("Amount", 15)
+        amountField = JTextField("Amount", 15)
 
         // Radio Button ---> Account type
         val accountTypeLabel = JLabel("Account Type:   ", SwingConstants.LEFT)
         accountTypeLabel.font = Font("Times New Roman", 1, 18)
         accountTypeLabel.setBounds(0, 50, 10, 10)
-        val radioButtonCurrent = JRadioButton("Current")
+        radioButtonCurrent = JRadioButton("Current")
 
         //current.setSelected(true);
-        val radioButtonSaving = JRadioButton("Saving")
+        radioButtonSaving = JRadioButton("Saving")
         val accountTypeRadioButtonGroup = ButtonGroup()
         accountTypeRadioButtonGroup.add(radioButtonCurrent)
         accountTypeRadioButtonGroup.add(radioButtonSaving)
@@ -136,7 +115,7 @@ class JpanelSplit {
         for (x in 1..31) {
             daysArr[x - 1] = x.toString();
         }
-        val dayComboBox = JComboBox(daysArr)
+        dayComboBox = JComboBox(daysArr)
         //List for month
         val monthsArr = arrayOf<String>(
             "January", "February", "March",
@@ -144,7 +123,7 @@ class JpanelSplit {
             "September", "October", "November", "December"
         )
         monthList = JList<Any?>(monthsArr)
-        monthList.selectedIndex = 1
+        monthList.selectedIndex = 0
         val listScroller = JScrollPane(monthList)
         listScroller.preferredSize = Dimension(100, 80)
         // text Field for year
@@ -162,47 +141,22 @@ class JpanelSplit {
         // Adding Listener to JButton
         insertEntryButton.addActionListener {
             //get text from text fields
-            nameTf = nameField.text
-            accTf = accountNumberField.text
-            amountTf = ammountField.text
-            yTf = yearField.text
-            //alist.add(j)
-            this.nameTf = nameTf
-            this.accTf = accTf
-            this.amountTf = amountTf
-            this.yTf = yTf
+            accountsList.add(AccountInfo(nameField.text, amountField.text, accountNumberField.text, yearField.text))
+            resetForm()
             //adding into array
-            count++
-            JOptionPane.showMessageDialog(null, "ADDED")
+            // If condition to check if jRadioButton2 is selected.
+            val isValid = radioButtonCurrent.isSelected || radioButtonSaving.isSelected
+            JOptionPane.showMessageDialog(this.frame, if (isValid) "ADDED" else "No option is selected")
 
             /// Display for OurSelf
-            for (i in alist.indices) {
+            for (i in accountsList.indices) {
                 print(
-                    """Name: ${alist[i].nameTf}
- Account#:""" + alist[i]
-                        .accTf + "\n Amount: " + alist[i].amountTf + "\n Year : " + alist[i]
-                        .yTf
+                    """Name: ${accountsList[i].nameText}
+ Account#:""" + accountsList[i]
+                        .accountText + "\n Amount: " + accountsList[i].amountText + "\n Year : " + accountsList[i]
+                        .yearText
                 )
             }
-
-
-            // Override Method
-
-            // Declaration of String class Objects.
-            var qual = " "
-
-            // If condition to check if jRadioButton2 is selected.
-            if (radioButtonCurrent.isSelected) {
-                qual = "Current"
-            } else if (radioButtonSaving.isSelected) {
-                qual = "Saving"
-            } else {
-                qual = "NO Option Is selected"
-                JOptionPane.showMessageDialog(null, qual)
-            }
-
-            // MessageDialog to show information selected radion buttons.
-            // JOptionPane.showMessageDialog(null,qual);
         }
 
         //yellowPanel.setLayout(new BoxLayout(yellowPanel, BoxLayout.Y_AXIS));
@@ -212,7 +166,7 @@ class JpanelSplit {
         yellowPanel.add(accountNumberLabel)
         yellowPanel.add(accountNumberField, BorderLayout.WEST)
         yellowPanel.add(ammountLabel)
-        yellowPanel.add(ammountField, BorderLayout.WEST)
+        yellowPanel.add(amountField, BorderLayout.WEST)
         yellowPanel.add(accountTypeLabel)
         yellowPanel.add(radioButtonCurrent)
         yellowPanel.add(radioButtonSaving)
@@ -221,12 +175,6 @@ class JpanelSplit {
         yellowPanel.add(listScroller)
         yellowPanel.add(yearField, BorderLayout.WEST)
         yellowPanel.add(insertEntryButton)
-
-        //********ADDING VALUES IN AN ARRAY************************************************************//
-        nameTf = String()
-        accTf = String()
-        amountTf = String()
-        yTf = String()
 
 
         //*******************************************************************************************//
