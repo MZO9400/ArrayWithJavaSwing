@@ -109,7 +109,7 @@ class JpanelSplit {
         }
         dayComboBox = JComboBox(daysArr)
         //List for month
-        val monthsArr = arrayOf<String>(
+        val monthsArr = arrayOf(
             "January", "February", "March",
             "April", "May", "June", "July", "August",
             "September", "October", "November", "December"
