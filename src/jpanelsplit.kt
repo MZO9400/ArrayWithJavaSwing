@@ -13,25 +13,28 @@ import javax.swing.table.DefaultTableModel
 
 
 class JpanelSplit {
-    private var frame: JFrame = JFrame()
-    private var contentPane: JPanel
-    private var pinkPanel: JPanel
-    private var yellowPanel: JPanel
-    private var greenPanel: JPanel
-    private var bluePanel: JPanel
-    private var twoPanelContainer: JPanel
-    private var nameField: JTextField
-    private var accountNumberField: JTextField
-    private var amountField: JTextField
-    private var yearField: JTextField
-    private var monthList: JList<*>
-    private var insertEntryButton: JButton
-    private var radioButtonSaving: JRadioButton
-    private var radioButtonCurrent: JRadioButton
-    private var dayComboBox: JComboBox<String?>
+    private val frame: JFrame = JFrame()
+    private val contentPane: JPanel
+    private val pinkPanel: JPanel
+    private val yellowPanel: JPanel
+    private val greenPanel: JPanel
+    private val bluePanel: JPanel
+    private val twoPanelContainer: JPanel
+    private val nameField: JTextField
+    private val accountNumberField: JTextField
+    private val amountField: JTextField
+    private val yearField: JTextField
+    private val monthList: JList<*>
+    private val insertEntryButton: JButton
+    private val radioButtonSaving: JRadioButton
+    private val radioButtonCurrent: JRadioButton
+    private val dayComboBox: JComboBox<String?>
     private val table: JTable
+    private val transferAmount: JTextField
+    private val transferAccountNames: JComboBox<String?>
+    private val transferButton: JButton
 
-    private var accountsList = ArrayList<AccountInfo>()
+    private val accountsList = ArrayList<AccountInfo>()
 
     private fun resetForm() {
         this.nameField.text = ""
@@ -48,6 +51,7 @@ class JpanelSplit {
         accountsList.removeAt(row)
         val model = table.model as DefaultTableModel
         model.removeRow(row)
+        transferAccountNames.remove(row)
     }
 
     private fun insert(data: AccountInfo) {
@@ -57,6 +61,8 @@ class JpanelSplit {
             accountsList.add(data)
             val model = table.model as DefaultTableModel
             model.addRow(arrayOf(data.nameText, data.accountText, data.amountText, data.yearText, "X"))
+            val boxModel = transferAccountNames.model as DefaultComboBoxModel
+            boxModel.addElement(data.nameText)
         }
     }
 
@@ -228,6 +234,29 @@ class JpanelSplit {
         yearField.toolTipText = "YEAR"
         insertEntryButton.toolTipText = "COMMIT CHANGE"
 
+        transferAmount = JTextField("Transfer Amount")
+        transferAccountNames = JComboBox<String?>()
+        transferButton = JButton("Transfer")
+        transferButton.addActionListener {
+            if (transferAmount.text.toIntOrNull() == null) {
+                JOptionPane.showMessageDialog(this.frame, "Amount is not valid")
+            } else {
+                accountsList[transferAccountNames.selectedIndex].amountText =
+                    (accountsList[transferAccountNames.selectedIndex].amountText.toInt() +
+                            transferAmount.text.toInt()).toString()
+                val transferModel = table.model as DefaultTableModel
+                transferModel.setValueAt(
+                    accountsList[transferAccountNames.selectedIndex].amountText,
+                    transferAccountNames.selectedIndex, 2
+                )
+                JOptionPane.showMessageDialog(this.frame, "Transfer successful!")
+            }
+        }
+
+        transferAmount.toolTipText = "Amount to transfer"
+        transferAccountNames.toolTipText = "Account name"
+        transferButton.toolTipText = "Transfer now"
+
         yellowPanel.add(accountLabel)
         yellowPanel.add(nameLabel)
         yellowPanel.add(nameField, BorderLayout.WEST)
@@ -245,6 +274,10 @@ class JpanelSplit {
         yellowPanel.add(insertEntryButton)
 
         greenPanel.add(JScrollPane(table))
+
+        bluePanel.add(transferButton)
+        bluePanel.add(transferAccountNames)
+        bluePanel.add(transferAmount)
 
         twoPanelContainer = JPanel(GridLayout(1, 2))
         twoPanelContainer.add(yellowPanel)
