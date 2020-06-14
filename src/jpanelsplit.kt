@@ -189,8 +189,15 @@ class JpanelSplit {
             }
         }
 
-        // Add columns to table
-        table = JTable()
+        /*
+        * Extend JTable with an anonymous class which overrides isCellEditable to always return false
+        * Thus disabling editing
+        */
+        table = object : JTable() {
+            override fun isCellEditable(row: Int, column: Int): Boolean {
+                return false
+            }
+        }
         val model = DefaultTableModel()
         model.setColumnIdentifiers(arrayOf("NAME", "ACC #", "AMOUNT", "YEAR", "DELETE"))
         table.model = model
