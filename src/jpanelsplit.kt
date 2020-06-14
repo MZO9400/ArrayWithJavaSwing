@@ -14,20 +14,20 @@ import javax.swing.*
  * @author wali
  */
 class JpanelSplit {
-    var frame: JFrame = JFrame()
-    var contentPane: JPanel
-    var pinkPanel: JPanel
-    var yellowPanel: JPanel
+    private var frame: JFrame = JFrame()
+    private var contentPane: JPanel
+    private var pinkPanel: JPanel
+    private var yellowPanel: JPanel
     var textPanel: JPanel? = null
-    var greenPanel: JPanel
-    var bluePanel: JPanel
-    var twoPanelContainer: JPanel
-    var t1: JTextField
-    var t2: JTextField
-    var t3: JTextField
-    var t4: JTextField
-    var mon: JList<*>
-    var add: JButton
+    private var greenPanel: JPanel
+    private var bluePanel: JPanel
+    private var twoPanelContainer: JPanel
+    private var nameField: JTextField
+    private var accountNumberField: JTextField
+    private var ammountField: JTextField
+    private var yearField: JTextField
+    private var monthList: JList<*>
+    private var insertEntryButton: JButton
 
     /* private void initComponents() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -61,16 +61,13 @@ class JpanelSplit {
 
     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     private var yTf: String
-    var d: String? = null
-    var m: String? = null
-    var i: Int? = null
-    var count = 0
+    private var count = 0
     private val alist = ArrayList<JpanelSplit>()
 
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val jpanelSplit = JpanelSplit()
+            JpanelSplit()
         }
     }
 
@@ -89,94 +86,73 @@ class JpanelSplit {
         pinkPanel.add(jlabel)
 
         //*******************************************************************************************///
+
         //yellowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         yellowPanel = JPanel()
         yellowPanel.background = Color.YELLOW
-        //Add new Account
-        val l = JLabel("Add new Account", SwingConstants.LEFT)
-        l.font = Font("Times New Roman", 1, 20)
-        l.setBounds(0, 50, 10, 10)
-        //Nmae
-        val label1 = JLabel("Name:   ", SwingConstants.LEFT)
-        label1.font = Font("Times New Roman", 1, 18)
-        label1.setBounds(0, 100, 10, 10)
-        t1 = JTextField("Name", 15)
-        //Account number
-        val accno = JLabel("Account #:   ", SwingConstants.LEFT)
-        accno.font = Font("Times New Roman", 1, 18)
-        accno.setBounds(0, 150, 10, 10)
-        t2 = JTextField("Account Number", 15)
-        //Amount
-        val amount = JLabel("Amount:   ", SwingConstants.LEFT)
-        amount.font = Font("Times New Roman", 1, 18)
-        amount.setBounds(0, 50, 10, 10)
-        t3 = JTextField("Amount", 15)
-        // Radio Button ---> Account type
-        val acctype = JLabel("Account Type:   ", SwingConstants.LEFT)
-        acctype.font = Font("Times New Roman", 1, 18)
-        acctype.setBounds(0, 50, 10, 10)
-        val current = JRadioButton("Current")
-        //current.setSelected(true);
-        val saving = JRadioButton("Saving")
-        val g = ButtonGroup()
-        g.add(current)
-        g.add(saving)
-        //Date Of Opening
-        val DoO = JLabel("Date of Opening:   ", SwingConstants.LEFT)
-        DoO.font = Font("Times New Roman", 1, 18)
-        DoO.setBounds(0, 50, 10, 10)
 
-        ///combo Box for day
-        val day = arrayOf(
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16",
-            "17",
-            "18",
-            "19",
-            "20",
-            "21",
-            "22",
-            "23",
-            "24",
-            "25",
-            "26",
-            "27",
-            "28",
-            "29",
-            "30",
-            "31"
-        )
-        val Day = JComboBox(day)
+        //Add new Account
+        val accountLabel = JLabel("Add new Account", SwingConstants.LEFT)
+        accountLabel.font = Font("Times New Roman", 1, 20)
+        accountLabel.setBounds(0, 50, 10, 10)
+
+        //Nmae
+        val nameLabel = JLabel("Name:   ", SwingConstants.LEFT)
+        nameLabel.font = Font("Times New Roman", 1, 18)
+        nameLabel.setBounds(0, 100, 10, 10)
+        nameField = JTextField("Name", 15)
+
+        //Account number
+        val accountNumberLabel = JLabel("Account #:   ", SwingConstants.LEFT)
+        accountNumberLabel.font = Font("Times New Roman", 1, 18)
+        accountNumberLabel.setBounds(0, 150, 10, 10)
+        accountNumberField = JTextField("Account Number", 15)
+
+        //Amount
+        val ammountLabel = JLabel("Amount:   ", SwingConstants.LEFT)
+        ammountLabel.font = Font("Times New Roman", 1, 18)
+        ammountLabel.setBounds(0, 50, 10, 10)
+        ammountField = JTextField("Amount", 15)
+
+        // Radio Button ---> Account type
+        val accountTypeLabel = JLabel("Account Type:   ", SwingConstants.LEFT)
+        accountTypeLabel.font = Font("Times New Roman", 1, 18)
+        accountTypeLabel.setBounds(0, 50, 10, 10)
+        val radioButtonCurrent = JRadioButton("Current")
+
+        //current.setSelected(true);
+        val radioButtonSaving = JRadioButton("Saving")
+        val accountTypeRadioButtonGroup = ButtonGroup()
+        accountTypeRadioButtonGroup.add(radioButtonCurrent)
+        accountTypeRadioButtonGroup.add(radioButtonSaving)
+
+        //Date Of Opening
+        val dateOfOpeningLabel = JLabel("Date of Opening:   ", SwingConstants.LEFT)
+        dateOfOpeningLabel.font = Font("Times New Roman", 1, 18)
+        dateOfOpeningLabel.setBounds(0, 50, 10, 10)
+
+        //comboBox for day
+        val daysArr = Array<String?>(31) { "it = $it" };
+        for (x in 1..31) {
+            daysArr[x - 1] = x.toString();
+        }
+        val dayComboBox = JComboBox(daysArr)
         //List for month
-        val month = arrayOf<String?>(
+        val monthsArr = arrayOf<String>(
             "January", "February", "March",
             "April", "May", "June", "July", "August",
             "September", "October", "November", "December"
         )
-        mon = JList<Any?>(month)
-        mon.selectedIndex = 1
-        val listScroller = JScrollPane(mon)
+        monthList = JList<Any?>(monthsArr)
+        monthList.selectedIndex = 1
+        val listScroller = JScrollPane(monthList)
         listScroller.preferredSize = Dimension(100, 80)
         // text Field for year
-        t4 = JTextField("Year", 6)
+        yearField = JTextField("Year", 6)
 
         // Add Button
-        add = JButton("Add")
-        add.setBounds(125, 90, 80, 30)
+        insertEntryButton = JButton("Add")
+        insertEntryButton.setBounds(125, 90, 80, 30)
 
         //adding values into an array
         // ButtonListener bh = new ButtonListener();
@@ -184,19 +160,18 @@ class JpanelSplit {
 
         //*****************************************************************************// 
         // Adding Listener to JButton
-        add.addActionListener {
+        insertEntryButton.addActionListener {
             //get text from text fields
-            nameTf = t1.text
-            accTf = t2.text
-            amountTf = t3.text
-            yTf = t4.text
-            val j = JpanelSplit()
-            j.nameTf = nameTf
-            j.accTf = accTf
-            j.amountTf = amountTf
-            j.yTf = yTf
+            nameTf = nameField.text
+            accTf = accountNumberField.text
+            amountTf = ammountField.text
+            yTf = yearField.text
+            //alist.add(j)
+            this.nameTf = nameTf
+            this.accTf = accTf
+            this.amountTf = amountTf
+            this.yTf = yTf
             //adding into array
-            alist.add(j)
             count++
             JOptionPane.showMessageDialog(null, "ADDED")
 
@@ -217,9 +192,9 @@ class JpanelSplit {
             var qual = " "
 
             // If condition to check if jRadioButton2 is selected.
-            if (current.isSelected) {
+            if (radioButtonCurrent.isSelected) {
                 qual = "Current"
-            } else if (saving.isSelected) {
+            } else if (radioButtonSaving.isSelected) {
                 qual = "Saving"
             } else {
                 qual = "NO Option Is selected"
@@ -231,21 +206,21 @@ class JpanelSplit {
         }
 
         //yellowPanel.setLayout(new BoxLayout(yellowPanel, BoxLayout.Y_AXIS));
-        yellowPanel.add(l)
-        yellowPanel.add(label1)
-        yellowPanel.add(t1, BorderLayout.WEST)
-        yellowPanel.add(accno)
-        yellowPanel.add(t2, BorderLayout.WEST)
-        yellowPanel.add(amount)
-        yellowPanel.add(t3, BorderLayout.WEST)
-        yellowPanel.add(acctype)
-        yellowPanel.add(current)
-        yellowPanel.add(saving)
-        yellowPanel.add(DoO)
-        yellowPanel.add(Day)
+        yellowPanel.add(accountLabel)
+        yellowPanel.add(nameLabel)
+        yellowPanel.add(nameField, BorderLayout.WEST)
+        yellowPanel.add(accountNumberLabel)
+        yellowPanel.add(accountNumberField, BorderLayout.WEST)
+        yellowPanel.add(ammountLabel)
+        yellowPanel.add(ammountField, BorderLayout.WEST)
+        yellowPanel.add(accountTypeLabel)
+        yellowPanel.add(radioButtonCurrent)
+        yellowPanel.add(radioButtonSaving)
+        yellowPanel.add(dateOfOpeningLabel)
+        yellowPanel.add(dayComboBox)
         yellowPanel.add(listScroller)
-        yellowPanel.add(t4, BorderLayout.WEST)
-        yellowPanel.add(add)
+        yellowPanel.add(yearField, BorderLayout.WEST)
+        yellowPanel.add(insertEntryButton)
 
         //********ADDING VALUES IN AN ARRAY************************************************************//
         nameTf = String()
