@@ -172,8 +172,8 @@ class JpanelSplit {
 
         monthList = JList<Any?>(monthsArr)
         monthList.selectedIndex = 0
-        val listScroller = JScrollPane(monthList)
-        listScroller.preferredSize = Dimension(100, 80)
+        val monthListScroller = JScrollPane(monthList)
+        monthListScroller.preferredSize = Dimension(100, 80)
 
         // text Field for year
         yearField = JTextField("Year", 6)
@@ -217,6 +217,17 @@ class JpanelSplit {
             }
         })
 
+        // Tooltips
+        nameField.toolTipText = "NAME"
+        accountNumberField.toolTipText = "ACCOUNT NUMBER"
+        amountField.toolTipText = "AMOUNT"
+        radioButtonCurrent.toolTipText = "ACCOUNT TYPE: CURRENT"
+        radioButtonSaving.toolTipText = "ACCOUNT TYPE: SAVINGS"
+        monthListScroller.toolTipText = "MONTH"
+        dayComboBox.toolTipText = "DAY"
+        yearField.toolTipText = "YEAR"
+        insertEntryButton.toolTipText = "COMMIT CHANGE"
+
         yellowPanel.add(accountLabel)
         yellowPanel.add(nameLabel)
         yellowPanel.add(nameField, BorderLayout.WEST)
@@ -229,7 +240,7 @@ class JpanelSplit {
         yellowPanel.add(radioButtonSaving)
         yellowPanel.add(dateOfOpeningLabel)
         yellowPanel.add(dayComboBox)
-        yellowPanel.add(listScroller)
+        yellowPanel.add(monthListScroller)
         yellowPanel.add(yearField, BorderLayout.WEST)
         yellowPanel.add(insertEntryButton)
 
