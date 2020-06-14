@@ -4,6 +4,8 @@
 package jpanelsplit
 
 import java.awt.*
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.util.*
 import java.util.regex.Pattern
 import javax.swing.*
@@ -29,7 +31,7 @@ class JpanelSplit {
     private var dayComboBox: JComboBox<String?>
     private val table: JTable
 
-    private val accountsList = ArrayList<AccountInfo>()
+    private var accountsList = ArrayList<AccountInfo>()
 
     private fun resetForm() {
         this.nameField.text = ""
@@ -42,13 +44,19 @@ class JpanelSplit {
         this.dayComboBox.selectedIndex = 0
     }
 
+    private fun removeElement(row: Int) {
+        accountsList.removeAt(row)
+        val model = table.model as DefaultTableModel
+        model.removeRow(row)
+    }
+
     private fun insert(data: AccountInfo) {
         if (validate()) {
             JOptionPane.showMessageDialog(this.frame, "ADDED")
             resetForm()
             accountsList.add(data)
             val model = table.model as DefaultTableModel
-            model.addRow(arrayOf(data.nameText, data.accountText, data.amountText, data.yearText, "DELETE"))
+            model.addRow(arrayOf(data.nameText, data.accountText, data.amountText, data.yearText, "X"))
         }
     }
 
@@ -201,6 +209,13 @@ class JpanelSplit {
         val model = DefaultTableModel()
         model.setColumnIdentifiers(arrayOf("NAME", "ACC #", "AMOUNT", "YEAR", "DELETE"))
         table.model = model
+
+        table.addMouseListener(object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent) {
+                if (table.columnAtPoint(e.point) == 4)
+                    removeElement(table.rowAtPoint(e.point))
+            }
+        })
 
         yellowPanel.add(accountLabel)
         yellowPanel.add(nameLabel)
