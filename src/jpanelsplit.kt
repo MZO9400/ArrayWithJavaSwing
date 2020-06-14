@@ -249,9 +249,13 @@ class JpanelSplit {
                     accountsList[transferAccountNames.selectedIndex].amountText,
                     transferAccountNames.selectedIndex, 2
                 )
+                transferAmount.text = ""
                 JOptionPane.showMessageDialog(this.frame, "Transfer successful!")
             }
         }
+        transferAmount.setBounds(50, 50, 100, 10)
+        transferAccountNames.setBounds(50, 100, 100, 10)
+        transferButton.setBounds(50, 150, 100, 10)
 
         transferAmount.toolTipText = "Amount to transfer"
         transferAccountNames.toolTipText = "Account name"
@@ -275,9 +279,9 @@ class JpanelSplit {
 
         greenPanel.add(JScrollPane(table))
 
-        bluePanel.add(transferButton)
         bluePanel.add(transferAccountNames)
         bluePanel.add(transferAmount)
+        bluePanel.add(transferButton)
 
         twoPanelContainer = JPanel(GridLayout(1, 2))
         twoPanelContainer.add(yellowPanel)
