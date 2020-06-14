@@ -6,6 +6,8 @@ package jpanelsplit
 import java.awt.*
 import java.util.*
 import javax.swing.*
+import javax.swing.table.DefaultTableModel
+
 
 class JpanelSplit {
     private var frame: JFrame = JFrame()
@@ -24,6 +26,7 @@ class JpanelSplit {
     private var radioButtonSaving: JRadioButton
     private var radioButtonCurrent: JRadioButton
     private var dayComboBox: JComboBox<String?>
+    private val table: JTable
 
     private val accountsList = ArrayList<AccountInfo>()
 
@@ -37,6 +40,14 @@ class JpanelSplit {
         this.monthList.selectedIndex = 0
         this.dayComboBox.selectedIndex = 0
     }
+
+    private fun insert(data: AccountInfo) {
+        accountsList.add(data)
+        val model = table.model as DefaultTableModel
+        model.addRow(arrayOf(data.nameText, data.accountText, data.amountText, data.yearText, "DELETE"))
+        resetForm()
+    }
+
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
@@ -45,7 +56,6 @@ class JpanelSplit {
     }
 
     init {
-//        initComponents();
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         contentPane = JPanel(GridLayout(3, 1))
 
@@ -57,29 +67,33 @@ class JpanelSplit {
         headerLabel.font = Font("Verdana", 1, 20)
         pinkPanel.add(headerLabel)
 
-
-        //yellowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         yellowPanel = JPanel()
         yellowPanel.background = Color.YELLOW
 
-        //Add new Account
+        bluePanel = JPanel()
+        bluePanel.background = Color.BLUE
+
+        greenPanel = JPanel()
+        greenPanel.background = Color.GREEN
+
+        // Add new Account
         val accountLabel = JLabel("Add new Account", SwingConstants.LEFT)
         accountLabel.font = Font("Times New Roman", 1, 20)
         accountLabel.setBounds(0, 50, 10, 10)
 
-        //Name
+        // Name
         val nameLabel = JLabel("Name:   ", SwingConstants.LEFT)
         nameLabel.font = Font("Times New Roman", 1, 18)
         nameLabel.setBounds(0, 100, 10, 10)
         nameField = JTextField("Name", 15)
 
-        //Account number
+        // Account number
         val accountNumberLabel = JLabel("Account #:   ", SwingConstants.LEFT)
         accountNumberLabel.font = Font("Times New Roman", 1, 18)
         accountNumberLabel.setBounds(0, 150, 10, 10)
         accountNumberField = JTextField("Account Number", 15)
 
-        //Amount
+        // Amount
         val ammountLabel = JLabel("Amount:   ", SwingConstants.LEFT)
         ammountLabel.font = Font("Times New Roman", 1, 18)
         ammountLabel.setBounds(0, 50, 10, 10)
@@ -91,24 +105,25 @@ class JpanelSplit {
         accountTypeLabel.setBounds(0, 50, 10, 10)
         radioButtonCurrent = JRadioButton("Current")
 
-        //current.setSelected(true);
+        // current.setSelected(true);
         radioButtonSaving = JRadioButton("Saving")
         val accountTypeRadioButtonGroup = ButtonGroup()
         accountTypeRadioButtonGroup.add(radioButtonCurrent)
         accountTypeRadioButtonGroup.add(radioButtonSaving)
 
-        //Date Of Opening
+        // Date Of Opening
         val dateOfOpeningLabel = JLabel("Date of Opening:   ", SwingConstants.LEFT)
         dateOfOpeningLabel.font = Font("Times New Roman", 1, 18)
         dateOfOpeningLabel.setBounds(0, 50, 10, 10)
 
-        //comboBox for day
+        // comboBox for day
         val daysArr = Array<String?>(31) { "it = $it" }
         for (x in 1..31) {
             daysArr[x - 1] = x.toString()
         }
         dayComboBox = JComboBox(daysArr)
-        //List for month
+
+        // List for month
         val monthsArr = arrayOf(
             "January", "February", "March",
             "April", "May", "June", "July", "August",
@@ -129,15 +144,13 @@ class JpanelSplit {
 
         // Adding Listener to JButton
         insertEntryButton.addActionListener {
-            //get text from text fields
-            accountsList.add(AccountInfo(nameField.text, amountField.text, accountNumberField.text, yearField.text))
-            resetForm()
-            //adding into array
+            // get text from text fields
+            insert(AccountInfo(nameField.text, amountField.text, accountNumberField.text, yearField.text))
             // If condition to check if jRadioButton2 is selected.
             val isValid = radioButtonCurrent.isSelected || radioButtonSaving.isSelected
             JOptionPane.showMessageDialog(this.frame, if (isValid) "ADDED" else "No option is selected")
 
-            /// Display for OurSelf
+            // Display on log
             for (i in accountsList.indices) {
                 print(
                     """Name: ${accountsList[i].nameText}
@@ -148,7 +161,12 @@ class JpanelSplit {
             }
         }
 
-        //yellowPanel.setLayout(new BoxLayout(yellowPanel, BoxLayout.Y_AXIS));
+        // Add columns to table
+        table = JTable()
+        val model = DefaultTableModel()
+        model.setColumnIdentifiers(arrayOf("NAME", "ACC #", "AMOUNT", "YEAR", "DELETE"))
+        table.model = model
+
         yellowPanel.add(accountLabel)
         yellowPanel.add(nameLabel)
         yellowPanel.add(nameField, BorderLayout.WEST)
@@ -165,11 +183,7 @@ class JpanelSplit {
         yellowPanel.add(yearField, BorderLayout.WEST)
         yellowPanel.add(insertEntryButton)
 
-        bluePanel = JPanel()
-        bluePanel.background = Color.BLUE
-
-        greenPanel = JPanel()
-        greenPanel.background = Color.GREEN
+        greenPanel.add(JScrollPane(table))
 
         twoPanelContainer = JPanel(GridLayout(1, 2))
         twoPanelContainer.add(yellowPanel)
@@ -180,7 +194,6 @@ class JpanelSplit {
         frame.contentPane = contentPane
         val dim = Toolkit.getDefaultToolkit().screenSize
         frame.size = dim
-        //frame.pack();
         frame.isVisible = true // .show() is depreciated
     }
 }
