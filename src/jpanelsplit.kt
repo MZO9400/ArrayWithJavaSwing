@@ -1,18 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ * Written by Hamza (@MZO9400)
+*/
 package jpanelsplit
 
 import java.awt.*
 import java.util.*
 import javax.swing.*
 
-/**
- *
- * @author wali
- */
 class JpanelSplit {
     private var frame: JFrame = JFrame()
     private var contentPane: JPanel
