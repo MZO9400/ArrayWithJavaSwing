@@ -54,17 +54,15 @@ class JpanelSplit {
 //        initComponents();
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         contentPane = JPanel(GridLayout(3, 1))
-        //*********************************************************************************************//
 
         // first panel contain Introduction and project name
         pinkPanel = JPanel()
         pinkPanel.background = Color.PINK
-        val jlabel =
+        val headerLabel =
             JLabel("<html><h1>GUI FOR BANKING SYSTEM</h1><br>Name:  Sheeza Sarwar<br>Roll#:  3706-FBAS/BSSE/F18-B</html>")
-        jlabel.font = Font("Verdana", 1, 20)
-        pinkPanel.add(jlabel)
+        headerLabel.font = Font("Verdana", 1, 20)
+        pinkPanel.add(headerLabel)
 
-        //*******************************************************************************************///
 
         //yellowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         yellowPanel = JPanel()
@@ -75,7 +73,7 @@ class JpanelSplit {
         accountLabel.font = Font("Times New Roman", 1, 20)
         accountLabel.setBounds(0, 50, 10, 10)
 
-        //Nmae
+        //Name
         val nameLabel = JLabel("Name:   ", SwingConstants.LEFT)
         nameLabel.font = Font("Times New Roman", 1, 18)
         nameLabel.setBounds(0, 100, 10, 10)
@@ -111,9 +109,9 @@ class JpanelSplit {
         dateOfOpeningLabel.setBounds(0, 50, 10, 10)
 
         //comboBox for day
-        val daysArr = Array<String?>(31) { "it = $it" };
+        val daysArr = Array<String?>(31) { "it = $it" }
         for (x in 1..31) {
-            daysArr[x - 1] = x.toString();
+            daysArr[x - 1] = x.toString()
         }
         dayComboBox = JComboBox(daysArr)
         //List for month
@@ -122,10 +120,12 @@ class JpanelSplit {
             "April", "May", "June", "July", "August",
             "September", "October", "November", "December"
         )
+
         monthList = JList<Any?>(monthsArr)
         monthList.selectedIndex = 0
         val listScroller = JScrollPane(monthList)
         listScroller.preferredSize = Dimension(100, 80)
+
         // text Field for year
         yearField = JTextField("Year", 6)
 
@@ -133,11 +133,6 @@ class JpanelSplit {
         insertEntryButton = JButton("Add")
         insertEntryButton.setBounds(125, 90, 80, 30)
 
-        //adding values into an array
-        // ButtonListener bh = new ButtonListener();
-        // add.addActionListener((ActionListener) bh);
-
-        //*****************************************************************************// 
         // Adding Listener to JButton
         insertEntryButton.addActionListener {
             //get text from text fields
@@ -176,16 +171,12 @@ class JpanelSplit {
         yellowPanel.add(yearField, BorderLayout.WEST)
         yellowPanel.add(insertEntryButton)
 
-
-        //*******************************************************************************************//
         bluePanel = JPanel()
         bluePanel.background = Color.BLUE
 
-        //******************************************************************************************//
         greenPanel = JPanel()
         greenPanel.background = Color.GREEN
 
-        //*******************************************************************************************//
         twoPanelContainer = JPanel(GridLayout(1, 2))
         twoPanelContainer.add(yellowPanel)
         twoPanelContainer.add(bluePanel)
@@ -196,7 +187,6 @@ class JpanelSplit {
         val dim = Toolkit.getDefaultToolkit().screenSize
         frame.size = dim
         //frame.pack();
-        frame.isVisible = true
-        frame.show()
+        frame.isVisible = true // .show() is depreciated
     }
 }
