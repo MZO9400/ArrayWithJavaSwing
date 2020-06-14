@@ -51,7 +51,7 @@ class JpanelSplit {
         accountsList.removeAt(row)
         val model = table.model as DefaultTableModel
         model.removeRow(row)
-        transferAccountNames.remove(row)
+        transferAccountNames.removeItemAt(row)
     }
 
     private fun insert(data: AccountInfo) {
