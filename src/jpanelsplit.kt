@@ -5,6 +5,7 @@ package jpanelsplit
 
 import java.awt.*
 import java.util.*
+import java.util.regex.Pattern
 import javax.swing.*
 import javax.swing.table.DefaultTableModel
 
@@ -42,10 +43,41 @@ class JpanelSplit {
     }
 
     private fun insert(data: AccountInfo) {
-        accountsList.add(data)
-        val model = table.model as DefaultTableModel
-        model.addRow(arrayOf(data.nameText, data.accountText, data.amountText, data.yearText, "DELETE"))
-        resetForm()
+        if (validate()) {
+            JOptionPane.showMessageDialog(this.frame, "ADDED")
+            resetForm()
+            accountsList.add(data)
+            val model = table.model as DefaultTableModel
+            model.addRow(arrayOf(data.nameText, data.accountText, data.amountText, data.yearText, "DELETE"))
+        }
+    }
+
+    private fun validate(): Boolean {
+        var isValid = true
+        val stk = Stack<String>()
+        if (!radioButtonCurrent.isSelected && !radioButtonSaving.isSelected) {
+            isValid = false
+            stk.push("Account type is invalid")
+        }
+        if (nameField.text == "Name" || nameField.text == "" || !Pattern.matches("[a-zA-Z]+", nameField.text)) {
+            isValid = false
+            stk.push("Name is invalid")
+        }
+        if (accountNumberField.text == "" || accountNumberField.text.toIntOrNull() == null) {
+            isValid = false
+            stk.push("Account Number is invalid")
+        }
+        if (amountField.text == "" || amountField.text.toIntOrNull() == null) {
+            isValid = false
+            stk.push("Amount is invalid")
+        }
+        if (yearField.text == "Year" || yearField.text == "") {
+            isValid = false
+            stk.push("Year is invalid")
+        }
+        if (!isValid)
+            JOptionPane.showMessageDialog(this.frame, java.lang.String.join(",", stk))
+        return isValid
     }
 
     companion object {
@@ -144,11 +176,7 @@ class JpanelSplit {
 
         // Adding Listener to JButton
         insertEntryButton.addActionListener {
-            // get text from text fields
             insert(AccountInfo(nameField.text, amountField.text, accountNumberField.text, yearField.text))
-            // If condition to check if jRadioButton2 is selected.
-            val isValid = radioButtonCurrent.isSelected || radioButtonSaving.isSelected
-            JOptionPane.showMessageDialog(this.frame, if (isValid) "ADDED" else "No option is selected")
 
             // Display on log
             for (i in accountsList.indices) {
